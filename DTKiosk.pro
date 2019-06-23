@@ -34,6 +34,10 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
+INCLUDEPATH += $${PWD}/gen/client
+DEPENDPATH += $${PWD}/gen/client
+#LIBS += -L$${OUT_PWD}/gen/client/ -lclient
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
