@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "OAIHelpers.h"
+#include "yrforecast.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -10,7 +10,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->indoor->setText("22.4°C");
     ui->outdoor->setText("11.9°C");
     ui->forecast->setText("Sunny, 12°C");
-    ui->power->setText("550 W");
+    ui->power->setText("5600 W");
+    YrForecast forecast;
+    forecast.readXml("/home/endre/Programmering/Qt/DTKiosk/data/varsel.xml");
+    forecast.print();
 }
 
 MainWindow::~MainWindow()

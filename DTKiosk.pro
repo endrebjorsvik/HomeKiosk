@@ -4,21 +4,23 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets
+QT       += core gui widgets xml positioning
 
 TARGET = DTKiosk
 TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
-CONFIG += c++11
+CONFIG += c++14
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        yrforecast.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+        yrforecast.h
 
 FORMS += \
         mainwindow.ui
