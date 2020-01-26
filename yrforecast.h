@@ -9,21 +9,28 @@
 class ForecastPoint : public QObject
 {
 public:
+    ForecastPoint(QDateTime from, QDateTime to, int period);
+    void readXml(QXmlStreamReader*);
+    QString shortSummary();
+
+    void print();
+
+private:
     QDateTime from;
     QDateTime to;
     int period;
 
     QString condition;
     QUrl symbol;
-    double temperature;
-    QString temperatureUnit;
-    double precipitation;
-    double precipitationMin;
-    double precipitationMax;
-    double windDirection;
-    double windSpeed;
-    double pressure;
-    QString pressureUnit;
+    double temp;
+    QString tempUnit;
+    double precip;
+    double precipMin;
+    double precipMax;
+    double _windSpeed;
+    double windDir;
+    double _pressure;
+    QString _pressureUnit;
 };
 
 
@@ -32,8 +39,10 @@ class YrForecast : public QObject
     Q_OBJECT
 public:
     explicit YrForecast(QObject *parent = nullptr);
-    bool readXml(QString);
+    bool readXmlFile(QFile&);
+    bool readXml(QByteArray);
     void print();
+    ForecastPoint* current();
 
 signals:
 

@@ -7,13 +7,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->indoor->setText("22.4°C");
-    ui->outdoor->setText("11.9°C");
-    ui->forecast->setText("Sunny, 12°C");
-    ui->power->setText("5600 W");
     YrForecast forecast;
-    forecast.readXml("/home/endre/Programmering/Qt/DTKiosk/data/varsel.xml");
-    forecast.print();
+    QFile f("/home/endre/Programmering/Qt/DTKiosk/data/varsel.xml");
+    forecast.readXmlFile(f);
+    ui->indoor->setText("24.3°C");
+    ui->outdoor->setText("11.4°C");
+    ui->forecast->setText(forecast.current()->shortSummary());
+    ui->power->setText("5600 W");
 }
 
 MainWindow::~MainWindow()

@@ -9,15 +9,21 @@ YrForecast::YrForecast(QObject *parent) : QObject(parent)
 
 }
 
-bool YrForecast::readXml(QString filename)
+bool YrForecast::readXmlFile(QFile &f)
 {
-    QFile f(filename);
+
     if (!f.open(QFile::ReadOnly | QFile::Text)) {
         std::cout << "Cannot read file: " << f.errorString().toStdString() << std::endl;
         exit(1);
     }
+    auto res = this->readXml(f.readAll());
+    f.close();
+    return res;
+}
 
-    this->xml.setDevice(&f);
+bool YrForecast::readXml(QByteArray stream)
+{
+    this->xml.addData(stream);
     if (this->xml.readNextStartElement()) {
         if (this->xml.name() != "weatherdata") {
             this->xml.raiseError("Unexpected file format. Expected <weatherdata> start tag");
@@ -31,7 +37,6 @@ bool YrForecast::readXml(QString filename)
         return false;
     }
     this->xml.clear();
-    f.close();
     return true;
 }
 
@@ -147,18 +152,24 @@ void YrForecast::readForecast()
     }
 }
 
+void YrForecast::readObservation()
+{
+    std::cout << "Skipping weatherstation data" << std::endl;
+    this->xml.skipCurrentElement();
+}
+
 void YrForecast::readForecastTabular()
 {
     while (this->xml.readNextStartElement()) {
         auto name = this->xml.name().toString();
         if (name == "time") {
-            ForecastPoint* point = new ForecastPoint;
             auto attrs = this->xml.attributes();
-            point->from = QDateTime::fromString(attrs.value("from").toString(), Qt::ISODate);
-            point->to = QDateTime::fromString(attrs.value("to").toString(), Qt::ISODate);
-            point->period = attrs.value("from").toInt();
+            auto from = QDateTime::fromString(attrs.value("from").toString(), Qt::ISODate);
+            auto to = QDateTime::fromString(attrs.value("to").toString(), Qt::ISODate);
+            auto period = attrs.value("from").toInt();
+            ForecastPoint* point = new ForecastPoint(from, to, period);
+            point->readXml(&this->xml);
             forecasts.append(point);
-            this->readForecastPoint(point);
         } else {
             // Unknown tags. Should not really appear. Perhaps a warning?
             this->xml.skipCurrentElement();
@@ -166,48 +177,44 @@ void YrForecast::readForecastTabular()
     }
 }
 
-void YrForecast::readForecastPoint(ForecastPoint* point)
+ForecastPoint::ForecastPoint(QDateTime from, QDateTime to, int period): from(from), to(to), period(period) {}
+
+void ForecastPoint::readXml(QXmlStreamReader* xml)
 {
-    while (this->xml.readNextStartElement()) {
-        auto name = this->xml.name().toString();
-        auto attrs = this->xml.attributes();
+    while (xml->readNextStartElement()) {
+        auto name = xml->name().toString();
+        auto attrs = xml->attributes();
         if (name == "symbol") {
             // https://symbol.yr.no/grafikk/sym/svg/{var}.svg
             // Eg. https://symbol.yr.no/grafikk/sym/svg/34.svg (for var = '34')
-            point->condition = attrs.value("name").toString();
+            this->condition = attrs.value("name").toString();
             auto symId = attrs.value("var").toString();
-            point->symbol = QUrl(QString("https://symbol.yr.no/grafikk/sym/svg/%1.svg").arg(symId));
-            this->xml.skipCurrentElement();
+            this->symbol = QUrl(QString("https://symbol.yr.no/grafikk/sym/svg/%1.svg").arg(symId));
+            xml->skipCurrentElement();
         } else if (name == "precipitation") {
-            point->precipitation = attrs.value("value").toDouble();
-            point->precipitationMin = attrs.value("minvalue").toDouble();
-            point->precipitationMax = attrs.value("maxvalue").toDouble();
-            this->xml.skipCurrentElement();
+            this->precip= attrs.value("value").toDouble();
+            this->precipMin = attrs.value("minvalue").toDouble();
+            this->precipMax = attrs.value("maxvalue").toDouble();
+            xml->skipCurrentElement();
         } else if (name == "windDirection") {
-            point->windDirection = attrs.value("deg").toDouble();
-            this->xml.skipCurrentElement();
+            this->windDir= attrs.value("deg").toDouble();
+            xml->skipCurrentElement();
         } else if (name == "windSpeed") {
-            point->windSpeed = attrs.value("mps").toDouble();
-            this->xml.skipCurrentElement();
+            this->_windSpeed = attrs.value("mps").toDouble();
+            xml->skipCurrentElement();
         } else if (name == "temperature") {
-            point->temperature = attrs.value("value").toDouble();
-            point->temperatureUnit = attrs.value("unit").toString();
-            this->xml.skipCurrentElement();
+            this->temp= attrs.value("value").toDouble();
+            this->tempUnit = attrs.value("unit").toString();
+            xml->skipCurrentElement();
         } else if (name == "pressure") {
-            point->pressure = attrs.value("value").toDouble();
-            point->pressureUnit = attrs.value("unit").toString();
-            this->xml.skipCurrentElement();
+            this->_pressure = attrs.value("value").toDouble();
+            this->_pressureUnit = attrs.value("unit").toString();
+            xml->skipCurrentElement();
         } else {
             // Unknown tags. Should not really appear. Perhaps a warning?
-            this->xml.skipCurrentElement();
+            xml->skipCurrentElement();
         }
     }
-}
-
-void YrForecast::readObservation()
-{
-    std::cout << "Skipping weatherstation data" << std::endl;
-    this->xml.skipCurrentElement();
 }
 
 void YrForecast::print()
@@ -221,13 +228,33 @@ void YrForecast::print()
     std::cout << "Sunrise: " << this->sunrise.toString().toStdString() << std::endl;
     std::cout << "Sunset: " << this->sunset.toString().toStdString() << std::endl;
     for (auto forecast : this->forecasts) {
-        std::cout << forecast->from.toString().toStdString() << " to "
-                  << forecast->to.toString().toStdString() << " ("
-                  << forecast->period << "):" << std::endl;
-        std::cout << forecast->condition.toStdString() << ", " << forecast->temperature << " "
-                  << forecast->temperatureUnit.toStdString() << ", " << forecast->precipitation
-                  << " mm (" << forecast->precipitationMin << "-" << forecast->precipitationMax << " mm), "
-                  << forecast->windSpeed << " m/s " << forecast->windDirection << " degrees, "
-                  << std::endl;
+        forecast->print();
     }
+}
+
+ForecastPoint* YrForecast::current()
+{
+    return forecasts[0];
+}
+
+void ForecastPoint::print()
+{
+    std::cout << from.toString().toStdString() << " to " << to.toString().toStdString()
+              << " (" << period << "):" << std::endl;
+    std::cout << condition.toStdString() << ", " << temp<< " " << tempUnit.toStdString()
+              << ", " << precip << " mm (" << precipMin << "-" << precipMax << " mm), "
+              << _windSpeed << " m/s " << windDir<< " degrees, " << std::endl;
+}
+
+QString ForecastPoint::shortSummary()
+{
+    QString unit;
+    if (this->tempUnit == "celsius") {
+        unit = "°C";
+    } else if (this->tempUnit == "fahrenheit") {
+        unit = "°F";
+    }
+    return this->condition + ", " + QString("%1").arg(this->temp) + unit + ",\n"
+            + QString("%1").arg(this->precipMin) + "-"
+            + QString("%1").arg(this->precipMax) + " mm";
 }
