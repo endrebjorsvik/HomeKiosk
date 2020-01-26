@@ -18,7 +18,8 @@ public:
     ~MainWindow();
 
 public slots:
-    void updateForecast(QString summary, QUrl icon);
+    void updateForecast(QString summary);
+    void updateForecastSymbol(QByteArray data);
 
 protected:
     QNetworkAccessManager networkmanager;

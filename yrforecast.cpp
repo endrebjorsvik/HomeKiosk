@@ -15,6 +15,8 @@ YrForecast::YrForecast(QUrl url, QNetworkAccessManager* manager, QObject *parent
     this->networkmanager = manager;
     connect(this->networkmanager, &QNetworkAccessManager::finished,
             this, &YrForecast::updateForecast);
+    connect(this->networkmanager, &QNetworkAccessManager::finished,
+            this, &YrForecast::updateSymbol);
 }
 
 YrForecast::~YrForecast()
@@ -67,7 +69,8 @@ bool YrForecast::readXml(QByteArray stream)
     }
     this->xml.clear();
     auto current = this->current();
-    emit this->forecastUpdated(current->shortSummary(), current->symbolUrl());
+    emit this->forecastUpdated(current->shortSummary());
+    this->fetchSymbol(current->symbolUrl());
     return true;
 }
 
@@ -218,11 +221,15 @@ void ForecastPoint::readXml(QXmlStreamReader* xml)
         auto name = xml->name().toString();
         auto attrs = xml->attributes();
         if (name == "symbol") {
-            // https://symbol.yr.no/grafikk/sym/svg/{var}.svg
-            // Eg. https://symbol.yr.no/grafikk/sym/svg/34.svg (for var = '34')
+            // The SVG format used by Yr is not supported by Qt, which
+            // only supports SVG Tiny (1.2).
+            // // https://symbol.yr.no/grafikk/sym/svg/{var}.svg
+            // // Eg. https://symbol.yr.no/grafikk/sym/svg/34.svg (for var = '34')
+            // Using PNG instead
+            // https://symbol.yr.no/grafikk/sym/b200/{var}.png
             this->condition = attrs.value("name").toString();
             auto symId = attrs.value("var").toString();
-            this->symbol = QUrl(QString("https://symbol.yr.no/grafikk/sym/svg/%1.svg").arg(symId));
+            this->symbol = QUrl(QString("https://symbol.yr.no/grafikk/sym/b200/%1.png").arg(symId));
             xml->skipCurrentElement();
         } else if (name == "precipitation") {
             this->precip= attrs.value("value").toDouble();
@@ -269,6 +276,26 @@ ForecastPoint* YrForecast::current()
 {
     return forecasts.first();
 }
+
+void YrForecast::fetchSymbol(QUrl url)
+{
+    std::cout << "Fetching symbol: " << url.toString().toStdString() << std::endl;
+    auto req = QNetworkRequest(url);
+    this->networkmanager->get(req);
+}
+
+void YrForecast::updateSymbol(QNetworkReply* reply)
+{
+    if (reply->url().host() == "symbol.yr.no") {
+        emit symbolUpdated(reply->readAll());
+        reply->deleteLater();
+    }
+}
+
+
+/////////////////////////////////////////
+/// ForecastPoint stuff
+/////////////////////////////////////////
 
 void ForecastPoint::print()
 {

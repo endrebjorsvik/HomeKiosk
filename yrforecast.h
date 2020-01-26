@@ -51,14 +51,18 @@ public:
     ForecastPoint* current();
 
 signals:
-    void forecastUpdated(QString summary, QUrl icon);
+    void forecastUpdated(QString summary);
+    void symbolUpdated(QByteArray data);
 
 public slots:
 
 private slots:
     void updateForecast(QNetworkReply* reply);
+    void updateSymbol(QNetworkReply* reply);
 
 private:
+    void fetchSymbol(QUrl url);
+
     QUrl xmlUrl;
     QNetworkAccessManager* networkmanager;
 

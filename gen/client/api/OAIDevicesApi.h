@@ -22,7 +22,7 @@
 #include "models/OAIInline_response_200_1.h"
 #include "models/OAIInline_response_200_3.h"
 #include "models/OAILabel.h"
-#include "models/OAIObject.h"
+#include "OAIObject.h"
 #include <QString>
 #include "models/UNKNOWN_BASE_TYPE.h"
 
