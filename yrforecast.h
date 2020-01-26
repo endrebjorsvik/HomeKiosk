@@ -5,13 +5,17 @@
 #include <QtCore>
 #include <QGeoLocation>
 #include <QXmlStreamReader>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 class ForecastPoint : public QObject
 {
 public:
     ForecastPoint(QDateTime from, QDateTime to, int period);
+    ForecastPoint();
     void readXml(QXmlStreamReader*);
-    QString shortSummary();
+    QString shortSummary() const;
+    QUrl symbolUrl() const;
 
     void print();
 
@@ -38,17 +42,27 @@ class YrForecast : public QObject
 {
     Q_OBJECT
 public:
-    explicit YrForecast(QObject *parent = nullptr);
-    bool readXmlFile(QFile&);
+    explicit YrForecast(QUrl url, QNetworkAccessManager* manager, QObject *parent = nullptr);
+    ~YrForecast();
+    bool readXmlFile(QString);
     bool readXml(QByteArray);
+    void fetchForecast();
     void print();
     ForecastPoint* current();
 
 signals:
+    void forecastUpdated(QString summary, QUrl icon);
 
 public slots:
 
+private slots:
+    void updateForecast(QNetworkReply* reply);
+
 private:
+    QUrl xmlUrl;
+    QNetworkAccessManager* networkmanager;
+
+    // From XML file
     QGeoLocation location;
     QString credit;
     QUrl creditUrl;

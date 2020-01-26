@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets xml positioning
+QT       += core gui widgets xml positioning network svg
 
 TARGET = DTKiosk
 TEMPLATE = app

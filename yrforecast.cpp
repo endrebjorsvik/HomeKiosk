@@ -3,26 +3,55 @@
 #include <QGeoAddress>
 #include <QGeoCoordinate>
 #include <QFile>
+#include <QNetworkRequest>
 
-YrForecast::YrForecast(QObject *parent) : QObject(parent)
+YrForecast::YrForecast(QUrl url, QNetworkAccessManager* manager, QObject *parent) : QObject(parent)
 {
+    // Ensure minimum one forecast in the list
+    this->forecasts.append(new ForecastPoint());
 
+    // Setup download stuff
+    this->xmlUrl = url;
+    this->networkmanager = manager;
+    connect(this->networkmanager, &QNetworkAccessManager::finished,
+            this, &YrForecast::updateForecast);
 }
 
-bool YrForecast::readXmlFile(QFile &f)
+YrForecast::~YrForecast()
 {
+    qDeleteAll(this->forecasts);
+    this->forecasts.clear();
+}
 
+void YrForecast::fetchForecast()
+{
+    auto req = QNetworkRequest(this->xmlUrl);
+    this->networkmanager->get(req);
+}
+
+void YrForecast::updateForecast(QNetworkReply* reply)
+{
+    if (reply->url() == this->xmlUrl) {
+        this->readXml(reply->readAll());
+        reply->deleteLater();
+    }
+}
+
+bool YrForecast::readXmlFile(QString filename)
+{
+    QFile f(filename);
     if (!f.open(QFile::ReadOnly | QFile::Text)) {
         std::cout << "Cannot read file: " << f.errorString().toStdString() << std::endl;
         exit(1);
     }
-    auto res = this->readXml(f.readAll());
-    f.close();
-    return res;
+    return this->readXml(f.readAll());
 }
 
 bool YrForecast::readXml(QByteArray stream)
 {
+    qDeleteAll(this->forecasts);
+    this->forecasts.clear();
+
     this->xml.addData(stream);
     if (this->xml.readNextStartElement()) {
         if (this->xml.name() != "weatherdata") {
@@ -37,6 +66,8 @@ bool YrForecast::readXml(QByteArray stream)
         return false;
     }
     this->xml.clear();
+    auto current = this->current();
+    emit this->forecastUpdated(current->shortSummary(), current->symbolUrl());
     return true;
 }
 
@@ -179,6 +210,8 @@ void YrForecast::readForecastTabular()
 
 ForecastPoint::ForecastPoint(QDateTime from, QDateTime to, int period): from(from), to(to), period(period) {}
 
+ForecastPoint::ForecastPoint() {}
+
 void ForecastPoint::readXml(QXmlStreamReader* xml)
 {
     while (xml->readNextStartElement()) {
@@ -234,7 +267,7 @@ void YrForecast::print()
 
 ForecastPoint* YrForecast::current()
 {
-    return forecasts[0];
+    return forecasts.first();
 }
 
 void ForecastPoint::print()
@@ -246,7 +279,7 @@ void ForecastPoint::print()
               << _windSpeed << " m/s " << windDir<< " degrees, " << std::endl;
 }
 
-QString ForecastPoint::shortSummary()
+QString ForecastPoint::shortSummary() const
 {
     QString unit;
     if (this->tempUnit == "celsius") {
@@ -255,6 +288,11 @@ QString ForecastPoint::shortSummary()
         unit = "°F";
     }
     return this->condition + ", " + QString("%1").arg(this->temp) + unit + ",\n"
-            + QString("%1").arg(this->precipMin) + "-"
+            + QString("%1").arg(this->precipMin) + " - "
             + QString("%1").arg(this->precipMax) + " mm";
+}
+
+QUrl ForecastPoint::symbolUrl() const
+{
+    return this->symbol;
 }
