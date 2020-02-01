@@ -18,7 +18,7 @@ public:
     ~MainWindow();
 
 public slots:
-    void updateForecast(QString summary);
+    void updateForecast(QString temp, QString precip, QString time);
     void updateForecastSymbol(QByteArray data);
 
 protected:
@@ -27,7 +27,6 @@ protected:
 private:
     Ui::MainWindow *ui;
     YrForecast *forecast;
-
 };
 
 #endif // MAINWINDOW_H

@@ -4,6 +4,8 @@
 #include <QGeoCoordinate>
 #include <QFile>
 #include <QNetworkRequest>
+#include <QDebug>
+#include <QTextStream>
 
 YrForecast::YrForecast(QUrl url, QNetworkAccessManager* manager, QObject *parent) : QObject(parent)
 {
@@ -14,9 +16,14 @@ YrForecast::YrForecast(QUrl url, QNetworkAccessManager* manager, QObject *parent
     this->xmlUrl = url;
     this->networkmanager = manager;
     connect(this->networkmanager, &QNetworkAccessManager::finished,
-            this, &YrForecast::updateForecast);
+            this, &YrForecast::forecastDownloaded);
     connect(this->networkmanager, &QNetworkAccessManager::finished,
-            this, &YrForecast::updateSymbol);
+            this, &YrForecast::symbolDownloaded);
+
+    this->timer = new QTimer(this);
+    connect(this->timer, &QTimer::timeout,
+            this, &YrForecast::fetchForecast);
+    this->timer->setInterval(std::chrono::minutes(15));
 }
 
 YrForecast::~YrForecast()
@@ -25,15 +32,25 @@ YrForecast::~YrForecast()
     this->forecasts.clear();
 }
 
+void YrForecast::startTimer()
+{
+    this->fetchForecast();
+    this->timer->start();
+}
+
 void YrForecast::fetchForecast()
 {
     auto req = QNetworkRequest(this->xmlUrl);
     this->networkmanager->get(req);
 }
 
-void YrForecast::updateForecast(QNetworkReply* reply)
+void YrForecast::forecastDownloaded(QNetworkReply* reply)
 {
     if (reply->url() == this->xmlUrl) {
+        auto err = reply->error();
+        if (err != QNetworkReply::NoError) {
+            qCritical() << "Failed downloading symbol:" << err;
+        }
         this->readXml(reply->readAll());
         reply->deleteLater();
     }
@@ -43,7 +60,7 @@ bool YrForecast::readXmlFile(QString filename)
 {
     QFile f(filename);
     if (!f.open(QFile::ReadOnly | QFile::Text)) {
-        std::cout << "Cannot read file: " << f.errorString().toStdString() << std::endl;
+        qCritical() << "Cannot read file: " << f.errorString();
         exit(1);
     }
     return this->readXml(f.readAll());
@@ -64,12 +81,14 @@ bool YrForecast::readXml(QByteArray stream)
         }
     }
     if (this->xml.hasError()) {
-        std::cout << "XML parse error: " << this->xml.errorString().toStdString() << std::endl;
+        qCritical() << "XML parse error: " << this->xml.errorString();
         return false;
     }
     this->xml.clear();
     auto current = this->current();
-    emit this->forecastUpdated(current->shortSummary());
+    emit this->forecastUpdated(current->temperature(),
+                               current->precipitation(),
+                               current->time());
     this->fetchSymbol(current->symbolUrl());
     return true;
 }
@@ -143,7 +162,7 @@ void YrForecast::readCredits()
 
 void YrForecast::readLinks()
 {
-    std::cout << "Skipping link data" << std::endl;
+    qInfo() << "Skipping link data";
     this->xml.skipCurrentElement();
 }
 
@@ -180,7 +199,7 @@ void YrForecast::readForecast()
             this->readForecastTabular();
         } else {
             // Unknown tags. Should not really appear. Perhaps a warning?
-            std::cout << "Skipping: " << name.toStdString() << std::endl;
+            qInfo() << "Skipping: " << name;
             this->xml.skipCurrentElement();
         }
     }
@@ -188,7 +207,7 @@ void YrForecast::readForecast()
 
 void YrForecast::readObservation()
 {
-    std::cout << "Skipping weatherstation data" << std::endl;
+    qInfo() << "Skipping weatherstation data";
     this->xml.skipCurrentElement();
 }
 
@@ -226,10 +245,11 @@ void ForecastPoint::readXml(QXmlStreamReader* xml)
             // // https://symbol.yr.no/grafikk/sym/svg/{var}.svg
             // // Eg. https://symbol.yr.no/grafikk/sym/svg/34.svg (for var = '34')
             // Using PNG instead
-            // https://symbol.yr.no/grafikk/sym/b200/{var}.png
+            // https://www.yr.no/grafikk/sym/v2017/png/200/{var}.png
+            // (Deprecated? https://symbol.yr.no/grafikk/sym/b200/{var}.png)
             this->condition = attrs.value("name").toString();
             auto symId = attrs.value("var").toString();
-            this->symbol = QUrl(QString("https://symbol.yr.no/grafikk/sym/b200/%1.png").arg(symId));
+            this->symbol = QUrl(QString("https://www.yr.no/grafikk/sym/v2017/png/200/%1.png").arg(symId));
             xml->skipCurrentElement();
         } else if (name == "precipitation") {
             this->precip= attrs.value("value").toDouble();
@@ -257,19 +277,27 @@ void ForecastPoint::readXml(QXmlStreamReader* xml)
     }
 }
 
+QString YrForecast::toString() const
+{
+    QString s;
+    QTextStream out(&s);
+    out << "Location: " << this->location.address().text() << endl;
+    out << "Coordinate: " << this->location.coordinate().toString() << endl;
+    out << "Credit: " << this->credit << endl;
+    out << "Credit URL: " << this->creditUrl.toString() << endl;
+    out << "Last update: " << this->lastUpdate.toString() << endl;
+    out << "Next update: " << this->nextUpdate.toString() << endl;
+    out << "Sunrise: " << this->sunrise.toString() << endl;
+    out << "Sunset: " << this->sunset.toString() << endl;
+    for (auto forecast : this->forecasts) {
+        out << forecast->toString();
+    }
+    return s;
+}
+
 void YrForecast::print()
 {
-    std::cout << "Location: " << this->location.address().text().toStdString() << std::endl;
-    std::cout << "Coordinate: " << this->location.coordinate().toString().toStdString() << std::endl;
-    std::cout << "Credit: " << this->credit.toStdString() << std::endl;
-    std::cout << "Credit URL: " << this->creditUrl.toString().toStdString() << std::endl;
-    std::cout << "Last update: " << this->lastUpdate.toString().toStdString() << std::endl;
-    std::cout << "Next update: " << this->nextUpdate.toString().toStdString() << std::endl;
-    std::cout << "Sunrise: " << this->sunrise.toString().toStdString() << std::endl;
-    std::cout << "Sunset: " << this->sunset.toString().toStdString() << std::endl;
-    for (auto forecast : this->forecasts) {
-        forecast->print();
-    }
+    std::cout << this->toString().toStdString();
 }
 
 ForecastPoint* YrForecast::current()
@@ -279,14 +307,19 @@ ForecastPoint* YrForecast::current()
 
 void YrForecast::fetchSymbol(QUrl url)
 {
-    std::cout << "Fetching symbol: " << url.toString().toStdString() << std::endl;
+    qInfo() << "Fetching symbol: " << url.toString();
     auto req = QNetworkRequest(url);
     this->networkmanager->get(req);
 }
 
-void YrForecast::updateSymbol(QNetworkReply* reply)
+void YrForecast::symbolDownloaded(QNetworkReply* reply)
 {
-    if (reply->url().host() == "symbol.yr.no") {
+    auto url = reply->url();
+    if (url.host() == "www.yr.no" && url.path().startsWith("/grafikk/sym")) {
+        auto err = reply->error();
+        if (err != QNetworkReply::NoError) {
+            qCritical() << "Failed downloading symbol:" << err;
+        }
         emit symbolUpdated(reply->readAll());
         reply->deleteLater();
     }
@@ -297,16 +330,24 @@ void YrForecast::updateSymbol(QNetworkReply* reply)
 /// ForecastPoint stuff
 /////////////////////////////////////////
 
-void ForecastPoint::print()
+QString ForecastPoint::toString() const
 {
-    std::cout << from.toString().toStdString() << " to " << to.toString().toStdString()
-              << " (" << period << "):" << std::endl;
-    std::cout << condition.toStdString() << ", " << temp<< " " << tempUnit.toStdString()
-              << ", " << precip << " mm (" << precipMin << "-" << precipMax << " mm), "
-              << _windSpeed << " m/s " << windDir<< " degrees, " << std::endl;
+    QString s;
+    QTextStream out(&s);
+    out << from.toString() << " to " << to.toString() << " (" << period << "):" << endl;
+    out << condition << ", " << temp << " " << tempUnit << ", "
+        << precip << " mm (" << precipMin << "-" << precipMax << " mm), "
+        << _windSpeed << " m/s " << windDir<< " degrees, " << endl;
+    return s;
 }
 
-QString ForecastPoint::shortSummary() const
+void ForecastPoint::print()
+{
+    std::cout << this->toString().toStdString();
+}
+
+
+QString ForecastPoint::temperature() const
 {
     QString unit;
     if (this->tempUnit == "celsius") {
@@ -314,9 +355,21 @@ QString ForecastPoint::shortSummary() const
     } else if (this->tempUnit == "fahrenheit") {
         unit = "°F";
     }
-    return this->condition + ", " + QString("%1").arg(this->temp) + unit + ",\n"
-            + QString("%1").arg(this->precipMin) + " - "
+    return QString("%1").arg(this->temp) + unit;
+}
+QString ForecastPoint::precipitation() const
+{
+    return QString("%1").arg(this->precipMin) + " - "
             + QString("%1").arg(this->precipMax) + " mm";
+}
+
+QString ForecastPoint::time() const
+{
+    QString ret;
+    QTextStream s(&ret);
+    s << "" << this->from.toString(Qt::SystemLocaleShortDate) << endl
+      << QString::fromUtf8("\u2192 ") << this->to.toString(Qt::SystemLocaleShortDate);
+    return ret;
 }
 
 QUrl ForecastPoint::symbolUrl() const

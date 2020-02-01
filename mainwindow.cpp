@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &MainWindow::updateForecast);
     connect(this->forecast, &YrForecast::symbolUpdated,
             this, &MainWindow::updateForecastSymbol);
-    this->forecast->fetchForecast();
+    this->forecast->startTimer();
 }
 
 MainWindow::~MainWindow()
@@ -25,9 +24,11 @@ MainWindow::~MainWindow()
     delete forecast;
 }
 
-void MainWindow::updateForecast(QString summary)
+void MainWindow::updateForecast(QString temp, QString precip, QString time)
 {
-    ui->forecast->setText(summary);
+    ui->forecastTemp->setText(temp);
+    ui->forecastPrecip->setText(precip);
+    ui->forecastTime->setText(time);
 }
 
 void MainWindow::updateForecastSymbol(QByteArray data)

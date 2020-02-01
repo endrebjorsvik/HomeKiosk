@@ -7,6 +7,7 @@
 #include <QXmlStreamReader>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QTimer>
 
 class ForecastPoint : public QObject
 {
@@ -14,9 +15,11 @@ public:
     ForecastPoint(QDateTime from, QDateTime to, int period);
     ForecastPoint();
     void readXml(QXmlStreamReader*);
-    QString shortSummary() const;
+    QString temperature() const;
+    QString precipitation() const;
+    QString time() const;
     QUrl symbolUrl() const;
-
+    QString toString() const;
     void print();
 
 private:
@@ -46,25 +49,28 @@ public:
     ~YrForecast();
     bool readXmlFile(QString);
     bool readXml(QByteArray);
-    void fetchForecast();
+    QString toString() const;
     void print();
+    void startTimer();
     ForecastPoint* current();
 
 signals:
-    void forecastUpdated(QString summary);
+    void forecastUpdated(QString temp, QString precip, QString time);
     void symbolUpdated(QByteArray data);
 
 public slots:
+    void fetchForecast();
 
 private slots:
-    void updateForecast(QNetworkReply* reply);
-    void updateSymbol(QNetworkReply* reply);
+    void forecastDownloaded(QNetworkReply* reply);
+    void symbolDownloaded(QNetworkReply* reply);
 
 private:
     void fetchSymbol(QUrl url);
 
     QUrl xmlUrl;
-    QNetworkAccessManager* networkmanager;
+    QNetworkAccessManager *networkmanager;
+    QTimer *timer;
 
     // From XML file
     QGeoLocation location;
