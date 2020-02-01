@@ -11,6 +11,8 @@ HEADERS += \
     $${PWD}/OAIConnectionLatencyEvent.h \
     $${PWD}/OAIConnectionStatus.h \
     $${PWD}/OAIConnectionStatusEvent.h \
+    $${PWD}/OAICountingProximitySensor.h \
+    $${PWD}/OAICountingTouchSensor.h \
     $${PWD}/OAIDataConnector.h \
     $${PWD}/OAIDataConnectorMessage.h \
     $${PWD}/OAIDataConnectorMetrics.h \
@@ -21,6 +23,9 @@ HEADERS += \
     $${PWD}/OAIEthernetStatusEvent.h \
     $${PWD}/OAIEvent.h \
     $${PWD}/OAIEventType.h \
+    $${PWD}/OAIHumidity.h \
+    $${PWD}/OAIHumidityEvent.h \
+    $${PWD}/OAIHumiditySensor.h \
     $${PWD}/OAIInline_object.h \
     $${PWD}/OAIInline_object_1.h \
     $${PWD}/OAIInline_object_2.h \
@@ -47,6 +52,8 @@ HEADERS += \
     $${PWD}/OAINetworkStatusCloudConnector.h \
     $${PWD}/OAINetworkStatusEvent.h \
     $${PWD}/OAIObjectPresent.h \
+    $${PWD}/OAIObjectPresentCount.h \
+    $${PWD}/OAIObjectPresentCountEvent.h \
     $${PWD}/OAIObjectPresentEvent.h \
     $${PWD}/OAIOrganization.h \
     $${PWD}/OAIOrganizationPermissionList.h \
@@ -63,8 +70,13 @@ HEADERS += \
     $${PWD}/OAITemperatureSensor.h \
     $${PWD}/OAITimeseries.h \
     $${PWD}/OAITouch.h \
+    $${PWD}/OAITouchCount.h \
+    $${PWD}/OAITouchCountEvent.h \
     $${PWD}/OAITouchEvent.h \
     $${PWD}/OAITouchSensor.h \
+    $${PWD}/OAIWaterDetectionSensor.h \
+    $${PWD}/OAIWaterPresent.h \
+    $${PWD}/OAIWaterPresentEvent.h \
 # APIs
     $${PWD}/OAIDataConnectorsApi.h \
     $${PWD}/OAIDevicesApi.h \
@@ -76,8 +88,9 @@ HEADERS += \
 # Others
     $${PWD}/OAIHelpers.h \
     $${PWD}/OAIHttpRequest.h \
-    $${PWD}/OAIObject.h
-    $${PWD}/OAIEnum.h    
+    $${PWD}/OAIObject.h \
+    $${PWD}/OAIEnum.h \
+    $${PWD}/OAIHttpFileElement.h
 
 SOURCES += \
 # Models
@@ -90,6 +103,8 @@ SOURCES += \
     $${PWD}/OAIConnectionLatencyEvent.cpp \
     $${PWD}/OAIConnectionStatus.cpp \
     $${PWD}/OAIConnectionStatusEvent.cpp \
+    $${PWD}/OAICountingProximitySensor.cpp \
+    $${PWD}/OAICountingTouchSensor.cpp \
     $${PWD}/OAIDataConnector.cpp \
     $${PWD}/OAIDataConnectorMessage.cpp \
     $${PWD}/OAIDataConnectorMetrics.cpp \
@@ -100,6 +115,9 @@ SOURCES += \
     $${PWD}/OAIEthernetStatusEvent.cpp \
     $${PWD}/OAIEvent.cpp \
     $${PWD}/OAIEventType.cpp \
+    $${PWD}/OAIHumidity.cpp \
+    $${PWD}/OAIHumidityEvent.cpp \
+    $${PWD}/OAIHumiditySensor.cpp \
     $${PWD}/OAIInline_object.cpp \
     $${PWD}/OAIInline_object_1.cpp \
     $${PWD}/OAIInline_object_2.cpp \
@@ -126,6 +144,8 @@ SOURCES += \
     $${PWD}/OAINetworkStatusCloudConnector.cpp \
     $${PWD}/OAINetworkStatusEvent.cpp \
     $${PWD}/OAIObjectPresent.cpp \
+    $${PWD}/OAIObjectPresentCount.cpp \
+    $${PWD}/OAIObjectPresentCountEvent.cpp \
     $${PWD}/OAIObjectPresentEvent.cpp \
     $${PWD}/OAIOrganization.cpp \
     $${PWD}/OAIOrganizationPermissionList.cpp \
@@ -142,8 +162,13 @@ SOURCES += \
     $${PWD}/OAITemperatureSensor.cpp \
     $${PWD}/OAITimeseries.cpp \
     $${PWD}/OAITouch.cpp \
+    $${PWD}/OAITouchCount.cpp \
+    $${PWD}/OAITouchCountEvent.cpp \
     $${PWD}/OAITouchEvent.cpp \
     $${PWD}/OAITouchSensor.cpp \
+    $${PWD}/OAIWaterDetectionSensor.cpp \
+    $${PWD}/OAIWaterPresent.cpp \
+    $${PWD}/OAIWaterPresentEvent.cpp \
 # APIs
     $${PWD}/OAIDataConnectorsApi.cpp \
     $${PWD}/OAIDevicesApi.cpp \
@@ -154,5 +179,6 @@ SOURCES += \
     $${PWD}/OAIServiceAccountsApi.cpp \
 # Others
     $${PWD}/OAIHelpers.cpp \
-    $${PWD}/OAIHttpRequest.cpp
+    $${PWD}/OAIHttpRequest.cpp \
+    $${PWD}/OAIHttpFileElement.cpp
 
