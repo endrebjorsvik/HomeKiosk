@@ -355,12 +355,11 @@ QString ForecastPoint::temperature() const
     } else if (this->tempUnit == "fahrenheit") {
         unit = "°F";
     }
-    return QString("%1").arg(this->temp) + unit;
+    return QString("%1%2").arg(this->temp).arg(unit);
 }
 QString ForecastPoint::precipitation() const
 {
-    return QString("%1").arg(this->precipMin) + " - "
-            + QString("%1").arg(this->precipMax) + " mm";
+    return QString("%1 - %2 mm").arg(this->precipMin).arg(this->precipMax);
 }
 
 QString ForecastPoint::time() const
