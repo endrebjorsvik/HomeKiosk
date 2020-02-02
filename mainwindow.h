@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QNetworkAccessManager>
 #include "yrforecast.h"
-#include "api/OAIDevicesApi.h"
 
 namespace Ui {
 class MainWindow;
@@ -28,7 +27,6 @@ protected:
 private:
     Ui::MainWindow *ui;
     YrForecast *forecast;
-    OpenAPI::OAIDevicesApi *dtApi;
 };
 
 #endif // MAINWINDOW_H

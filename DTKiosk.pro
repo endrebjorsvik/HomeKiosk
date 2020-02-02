@@ -25,10 +25,9 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
-INCLUDEPATH += $${PWD}/gen/client
-DEPENDPATH += $${PWD}/gen/client
-
-include(gen/client/client.pri)
+#INCLUDEPATH += $${PWD}/gen/client
+#DEPENDPATH += $${PWD}/gen/client
+#include(gen/client/client.pri)
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -37,4 +36,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     .gitignore \
-    gen/client/client.pri
+    #gen/client/client.pri
