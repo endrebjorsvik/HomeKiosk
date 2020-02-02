@@ -1,6 +1,6 @@
 /**
  * API, Disruptive Technologies
- * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions. 
+ * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions.
  *
  * The version of the OpenAPI document: v2
  *
@@ -16,11 +16,10 @@
 
 #include "models/OAIInline_response_200_12.h"
 #include "models/OAIInline_response_200_13.h"
-#include "models/OAIObject.h"
+#include "OAIObject.h"
 #include "models/OAIServiceAccount.h"
 #include "models/OAIServiceAccountKey.h"
 #include "models/OAIServiceAccountKeyWithSecret.h"
-#include "models/UNKNOWN_BASE_TYPE.h"
 #include <QString>
 
 #include <QObject>
@@ -46,7 +45,6 @@ public:
     void abortRequests();
 
     void projectsProjectServiceaccountsGet(const QString &project, const QString &page_size, const QString &page_token);
-    void projectsProjectServiceaccountsPost(const QString &project, const UNKNOWN_BASE_TYPE &unknown_base_type);
     void projectsProjectServiceaccountsServiceaccountDelete(const QString &project, const QString &serviceaccount);
     void projectsProjectServiceaccountsServiceaccountGet(const QString &project, const QString &serviceaccount);
     void projectsProjectServiceaccountsServiceaccountKeysGet(const QString &project, const QString &serviceaccount, const QString &page_size, const QString &page_token);
@@ -117,7 +115,7 @@ signals:
     void projectsProjectServiceaccountsServiceaccountKeysPostSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
     void projectsProjectServiceaccountsServiceaccountPatchSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
 
-    void abortRequestsSignal(); 
+    void abortRequestsSignal();
 };
 
 } // namespace OpenAPI

@@ -1,6 +1,6 @@
 /**
  * API, Disruptive Technologies
- * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions. 
+ * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions.
  *
  * The version of the OpenAPI document: v2
  *
@@ -100,7 +100,7 @@ void OAIServiceAccountsApi::projectsProjectServiceaccountsGet(const QString &pro
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIServiceAccountsApi::projectsProjectServiceaccountsGetCallback);
-    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -125,32 +125,6 @@ void OAIServiceAccountsApi::projectsProjectServiceaccountsGetCallback(OAIHttpReq
         emit projectsProjectServiceaccountsGetSignalE(output, error_type, error_str);
         emit projectsProjectServiceaccountsGetSignalEFull(worker, error_type, error_str);
     }
-}
-
-void OAIServiceAccountsApi::projectsProjectServiceaccountsPost(const QString &project, const UNKNOWN_BASE_TYPE &unknown_base_type) {
-    QString fullPath = QString("%1://%2%3%4%5")
-                           .arg(_scheme)
-                           .arg(_host)
-                           .arg(_port ? ":" + QString::number(_port) : "")
-                           .arg(_basePath)
-                           .arg("/projects/{project}/serviceaccounts");
-    QString projectPathParam("{");
-    projectPathParam.append("project").append("}");
-    fullPath.replace(projectPathParam, QUrl::toPercentEncoding(::OpenAPI::toStringValue(project)));
-
-    OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this);
-    worker->setTimeOut(_timeOut);
-    worker->setWorkingDirectory(_workingDirectory);
-    OAIHttpRequestInput input(fullPath, "POST");
-
-    QString output = unknown_base_type.asJson();
-    input.request_body.append(output);
-
-    foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
-
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIServiceAccountsApi::projectsProjectServiceaccountsPostCallback);
-    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
-    worker->execute(&input);
 }
 
 void OAIServiceAccountsApi::projectsProjectServiceaccountsPostCallback(OAIHttpRequestWorker *worker) {
@@ -198,7 +172,7 @@ void OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountDelete(c
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountDeleteCallback);
-    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -246,7 +220,7 @@ void OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountGet(cons
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountGetCallback);
-    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -307,7 +281,7 @@ void OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountKeysGet(
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountKeysGetCallback);
-    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -359,7 +333,7 @@ void OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountKeysKeyD
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountKeysKeyDeleteCallback);
-    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -410,7 +384,7 @@ void OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountKeysKeyG
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountKeysKeyGetCallback);
-    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -462,7 +436,7 @@ void OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountKeysPost
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountKeysPostCallback);
-    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -520,7 +494,7 @@ void OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountPatch(co
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIServiceAccountsApi::projectsProjectServiceaccountsServiceaccountPatchCallback);
-    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIServiceAccountsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 

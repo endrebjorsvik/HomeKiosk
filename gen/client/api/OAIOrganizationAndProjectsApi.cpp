@@ -1,6 +1,6 @@
 /**
  * API, Disruptive Technologies
- * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions. 
+ * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions.
  *
  * The version of the OpenAPI document: v2
  *
@@ -97,7 +97,7 @@ void OAIOrganizationAndProjectsApi::organizationsGet(const QString &page_size, c
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIOrganizationAndProjectsApi::organizationsGetCallback);
-    connect(this, &OAIOrganizationAndProjectsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIOrganizationAndProjectsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -143,7 +143,7 @@ void OAIOrganizationAndProjectsApi::organizationsOrganizationGet(const QString &
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIOrganizationAndProjectsApi::organizationsOrganizationGetCallback);
-    connect(this, &OAIOrganizationAndProjectsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIOrganizationAndProjectsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -210,7 +210,7 @@ void OAIOrganizationAndProjectsApi::projectsGet(const QString &page_size, const 
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIOrganizationAndProjectsApi::projectsGetCallback);
-    connect(this, &OAIOrganizationAndProjectsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIOrganizationAndProjectsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -235,29 +235,6 @@ void OAIOrganizationAndProjectsApi::projectsGetCallback(OAIHttpRequestWorker *wo
         emit projectsGetSignalE(output, error_type, error_str);
         emit projectsGetSignalEFull(worker, error_type, error_str);
     }
-}
-
-void OAIOrganizationAndProjectsApi::projectsPost(const UNKNOWN_BASE_TYPE &unknown_base_type) {
-    QString fullPath = QString("%1://%2%3%4%5")
-                           .arg(_scheme)
-                           .arg(_host)
-                           .arg(_port ? ":" + QString::number(_port) : "")
-                           .arg(_basePath)
-                           .arg("/projects");
-
-    OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this);
-    worker->setTimeOut(_timeOut);
-    worker->setWorkingDirectory(_workingDirectory);
-    OAIHttpRequestInput input(fullPath, "POST");
-
-    QString output = unknown_base_type.asJson();
-    input.request_body.append(output);
-
-    foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
-
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIOrganizationAndProjectsApi::projectsPostCallback);
-    connect(this, &OAIOrganizationAndProjectsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
-    worker->execute(&input);
 }
 
 void OAIOrganizationAndProjectsApi::projectsPostCallback(OAIHttpRequestWorker *worker) {
@@ -302,7 +279,7 @@ void OAIOrganizationAndProjectsApi::projectsProjectDelete(const QString &project
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIOrganizationAndProjectsApi::projectsProjectDeleteCallback);
-    connect(this, &OAIOrganizationAndProjectsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIOrganizationAndProjectsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -347,7 +324,7 @@ void OAIOrganizationAndProjectsApi::projectsProjectGet(const QString &project) {
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIOrganizationAndProjectsApi::projectsProjectGetCallback);
-    connect(this, &OAIOrganizationAndProjectsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIOrganizationAndProjectsApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -372,32 +349,6 @@ void OAIOrganizationAndProjectsApi::projectsProjectGetCallback(OAIHttpRequestWor
         emit projectsProjectGetSignalE(output, error_type, error_str);
         emit projectsProjectGetSignalEFull(worker, error_type, error_str);
     }
-}
-
-void OAIOrganizationAndProjectsApi::projectsProjectPatch(const QString &project, const UNKNOWN_BASE_TYPE &unknown_base_type) {
-    QString fullPath = QString("%1://%2%3%4%5")
-                           .arg(_scheme)
-                           .arg(_host)
-                           .arg(_port ? ":" + QString::number(_port) : "")
-                           .arg(_basePath)
-                           .arg("/projects/{project}");
-    QString projectPathParam("{");
-    projectPathParam.append("project").append("}");
-    fullPath.replace(projectPathParam, QUrl::toPercentEncoding(::OpenAPI::toStringValue(project)));
-
-    OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this);
-    worker->setTimeOut(_timeOut);
-    worker->setWorkingDirectory(_workingDirectory);
-    OAIHttpRequestInput input(fullPath, "PATCH");
-
-    QString output = unknown_base_type.asJson();
-    input.request_body.append(output);
-
-    foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
-
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIOrganizationAndProjectsApi::projectsProjectPatchCallback);
-    connect(this, &OAIOrganizationAndProjectsApi::abortRequestsSignal, worker, &QObject::deleteLater); 
-    worker->execute(&input);
 }
 
 void OAIOrganizationAndProjectsApi::projectsProjectPatchCallback(OAIHttpRequestWorker *worker) {

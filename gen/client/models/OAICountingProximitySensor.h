@@ -1,6 +1,6 @@
 /**
  * API, Disruptive Technologies
- * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions. 
+ * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions.
  *
  * The version of the OpenAPI document: v2
  *
@@ -12,7 +12,7 @@
 /*
  * OAICountingProximitySensor.h
  *
- * A counting proximity sensor. 
+ * A counting proximity sensor.
  */
 
 #ifndef OAICountingProximitySensor_H
@@ -20,7 +20,6 @@
 
 #include <QJsonObject>
 
-#include "models/OAIAnyOfNetworkStatusEventBatteryStatusEventObjectPresentCountEventTouchEvent.h"
 #include <QList>
 #include <QMap>
 #include <QString>
@@ -50,9 +49,6 @@ public:
     QMap<QString, QString> getLabels() const;
     void setLabels(const QMap<QString, QString> &labels);
 
-    OAIAnyOfNetworkStatusEventBatteryStatusEventObjectPresentCountEventTouchEvent getReported() const;
-    void setReported(const OAIAnyOfNetworkStatusEventBatteryStatusEventObjectPresentCountEventTouchEvent &reported);
-
     virtual bool isSet() const override;
     virtual bool isValid() const override;
 
@@ -71,7 +67,7 @@ private:
     bool m_labels_isSet;
     bool m_labels_isValid;
 
-    OAIAnyOfNetworkStatusEventBatteryStatusEventObjectPresentCountEventTouchEvent reported;
+    QString reported;
     bool m_reported_isSet;
     bool m_reported_isValid;
 };

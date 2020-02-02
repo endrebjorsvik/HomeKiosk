@@ -1,6 +1,6 @@
 /**
  * API, Disruptive Technologies
- * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions. 
+ * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions.
  *
  * The version of the OpenAPI document: v2
  *
@@ -95,7 +95,7 @@ QJsonObject OAICloudConnector::asJsonObject() const {
     if (m_update_time_isSet) {
         obj.insert(QString("updateTime"), ::OpenAPI::toJsonValue(update_time));
     }
-    if (reported.isSet()) {
+    if (!reported.isEmpty()) {
         obj.insert(QString("reported"), ::OpenAPI::toJsonValue(reported));
     }
     return obj;
@@ -133,14 +133,6 @@ void OAICloudConnector::setUpdateTime(const QDateTime &update_time) {
     this->m_update_time_isSet = true;
 }
 
-OAIAnyOfConnectionStatusEventEthernetStatusEventCellularStatusEventConnectionLatencyEventTouchEvent OAICloudConnector::getReported() const {
-    return reported;
-}
-void OAICloudConnector::setReported(const OAIAnyOfConnectionStatusEventEthernetStatusEventCellularStatusEventConnectionLatencyEventTouchEvent &reported) {
-    this->reported = reported;
-    this->m_reported_isSet = true;
-}
-
 bool OAICloudConnector::isSet() const {
     bool isObjectUpdated = false;
     do {
@@ -164,7 +156,7 @@ bool OAICloudConnector::isSet() const {
             break;
         }
 
-        if (reported.isSet()) {
+        if (!reported.isEmpty()) {
             isObjectUpdated = true;
             break;
         }

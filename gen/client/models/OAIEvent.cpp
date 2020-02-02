@@ -98,7 +98,7 @@ QJsonObject OAIEvent::asJsonObject() const {
     if (event_type.isSet()) {
         obj.insert(QString("eventType"), ::OpenAPI::toJsonValue(event_type));
     }
-    if (data.isSet()) {
+    if (!data.isEmpty()) {
         obj.insert(QString("data"), ::OpenAPI::toJsonValue(data));
     }
     if (m_timestamp_isSet) {
@@ -132,14 +132,6 @@ OAIEventType OAIEvent::getEventType() const {
 void OAIEvent::setEventType(const OAIEventType &event_type) {
     this->event_type = event_type;
     this->m_event_type_isSet = true;
-}
-
-OAIOneOfTouchEventTemperatureEventObjectPresentEventBatteryStatusEventNetworkStatusEventLabelsChangedEventConnectionStatusEventEthernetStatusEventCellularStatusEventConnectionLatencyEvent OAIEvent::getData() const {
-    return data;
-}
-void OAIEvent::setData(const OAIOneOfTouchEventTemperatureEventObjectPresentEventBatteryStatusEventNetworkStatusEventLabelsChangedEventConnectionStatusEventEthernetStatusEventCellularStatusEventConnectionLatencyEvent &data) {
-    this->data = data;
-    this->m_data_isSet = true;
 }
 
 QDateTime OAIEvent::getTimestamp() const {
@@ -176,7 +168,7 @@ bool OAIEvent::isSet() const {
             break;
         }
 
-        if (data.isSet()) {
+        if (!data.isEmpty()) {
             isObjectUpdated = true;
             break;
         }

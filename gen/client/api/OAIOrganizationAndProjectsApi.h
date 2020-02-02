@@ -1,6 +1,6 @@
 /**
  * API, Disruptive Technologies
- * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions. 
+ * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions.
  *
  * The version of the OpenAPI document: v2
  *
@@ -16,10 +16,9 @@
 
 #include "models/OAIInline_response_200_11.h"
 #include "models/OAIInline_response_200_8.h"
-#include "models/OAIObject.h"
+#include "OAIObject.h"
 #include "models/OAIOrganization.h"
 #include "models/OAIProject.h"
-#include "models/UNKNOWN_BASE_TYPE.h"
 #include <QString>
 
 #include <QObject>
@@ -47,10 +46,8 @@ public:
     void organizationsGet(const QString &page_size, const QString &page_token);
     void organizationsOrganizationGet(const QString &organization);
     void projectsGet(const QString &page_size, const QString &page_token, const QString &organization, const QString &query);
-    void projectsPost(const UNKNOWN_BASE_TYPE &unknown_base_type);
     void projectsProjectDelete(const QString &project);
     void projectsProjectGet(const QString &project);
-    void projectsProjectPatch(const QString &project, const UNKNOWN_BASE_TYPE &unknown_base_type);
 
 private:
     QString _scheme, _host;
@@ -104,7 +101,7 @@ signals:
     void projectsProjectGetSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
     void projectsProjectPatchSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
 
-    void abortRequestsSignal(); 
+    void abortRequestsSignal();
 };
 
 } // namespace OpenAPI

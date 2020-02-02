@@ -21,7 +21,6 @@
 #include <QJsonObject>
 
 #include "models/OAIEventType.h"
-#include "models/OAIOneOfTouchEventTemperatureEventObjectPresentEventBatteryStatusEventNetworkStatusEventLabelsChangedEventConnectionStatusEventEthernetStatusEventCellularStatusEventConnectionLatencyEvent.h"
 #include <QDateTime>
 #include <QList>
 #include <QMap>
@@ -52,9 +51,6 @@ public:
     OAIEventType getEventType() const;
     void setEventType(const OAIEventType &event_type);
 
-    OAIOneOfTouchEventTemperatureEventObjectPresentEventBatteryStatusEventNetworkStatusEventLabelsChangedEventConnectionStatusEventEthernetStatusEventCellularStatusEventConnectionLatencyEvent getData() const;
-    void setData(const OAIOneOfTouchEventTemperatureEventObjectPresentEventBatteryStatusEventNetworkStatusEventLabelsChangedEventConnectionStatusEventEthernetStatusEventCellularStatusEventConnectionLatencyEvent &data);
-
     QDateTime getTimestamp() const;
     void setTimestamp(const QDateTime &timestamp);
 
@@ -79,7 +75,7 @@ private:
     bool m_event_type_isSet;
     bool m_event_type_isValid;
 
-    OAIOneOfTouchEventTemperatureEventObjectPresentEventBatteryStatusEventNetworkStatusEventLabelsChangedEventConnectionStatusEventEthernetStatusEventCellularStatusEventConnectionLatencyEvent data;
+    QString data;
     bool m_data_isSet;
     bool m_data_isValid;
 

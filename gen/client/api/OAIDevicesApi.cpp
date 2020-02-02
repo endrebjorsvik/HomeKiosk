@@ -1,6 +1,6 @@
 /**
  * API, Disruptive Technologies
- * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions. 
+ * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions.
  *
  * The version of the OpenAPI document: v2
  *
@@ -91,7 +91,7 @@ void OAIDevicesApi::projectsProjectDevicesDeviceGet(const QString &project, cons
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIDevicesApi::projectsProjectDevicesDeviceGetCallback);
-    connect(this, &OAIDevicesApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIDevicesApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -143,7 +143,7 @@ void OAIDevicesApi::projectsProjectDevicesDeviceLabelsLabelDelete(const QString 
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIDevicesApi::projectsProjectDevicesDeviceLabelsLabelDeleteCallback);
-    connect(this, &OAIDevicesApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIDevicesApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -169,38 +169,6 @@ void OAIDevicesApi::projectsProjectDevicesDeviceLabelsLabelDeleteCallback(OAIHtt
     }
 }
 
-void OAIDevicesApi::projectsProjectDevicesDeviceLabelsLabelPatch(const QString &project, const QString &device, const QString &label, const UNKNOWN_BASE_TYPE &unknown_base_type) {
-    QString fullPath = QString("%1://%2%3%4%5")
-                           .arg(_scheme)
-                           .arg(_host)
-                           .arg(_port ? ":" + QString::number(_port) : "")
-                           .arg(_basePath)
-                           .arg("/projects/{project}/devices/{device}/labels/{label}");
-    QString projectPathParam("{");
-    projectPathParam.append("project").append("}");
-    fullPath.replace(projectPathParam, QUrl::toPercentEncoding(::OpenAPI::toStringValue(project)));
-    QString devicePathParam("{");
-    devicePathParam.append("device").append("}");
-    fullPath.replace(devicePathParam, QUrl::toPercentEncoding(::OpenAPI::toStringValue(device)));
-    QString labelPathParam("{");
-    labelPathParam.append("label").append("}");
-    fullPath.replace(labelPathParam, QUrl::toPercentEncoding(::OpenAPI::toStringValue(label)));
-
-    OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this);
-    worker->setTimeOut(_timeOut);
-    worker->setWorkingDirectory(_workingDirectory);
-    OAIHttpRequestInput input(fullPath, "PATCH");
-
-    QString output = unknown_base_type.asJson();
-    input.request_body.append(output);
-
-    foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
-
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIDevicesApi::projectsProjectDevicesDeviceLabelsLabelPatchCallback);
-    connect(this, &OAIDevicesApi::abortRequestsSignal, worker, &QObject::deleteLater); 
-    worker->execute(&input);
-}
-
 void OAIDevicesApi::projectsProjectDevicesDeviceLabelsLabelPatchCallback(OAIHttpRequestWorker *worker) {
     QString msg;
     QString error_str = worker->error_str;
@@ -222,35 +190,6 @@ void OAIDevicesApi::projectsProjectDevicesDeviceLabelsLabelPatchCallback(OAIHttp
         emit projectsProjectDevicesDeviceLabelsLabelPatchSignalE(output, error_type, error_str);
         emit projectsProjectDevicesDeviceLabelsLabelPatchSignalEFull(worker, error_type, error_str);
     }
-}
-
-void OAIDevicesApi::projectsProjectDevicesDeviceLabelsPost(const QString &project, const QString &device, const UNKNOWN_BASE_TYPE &unknown_base_type) {
-    QString fullPath = QString("%1://%2%3%4%5")
-                           .arg(_scheme)
-                           .arg(_host)
-                           .arg(_port ? ":" + QString::number(_port) : "")
-                           .arg(_basePath)
-                           .arg("/projects/{project}/devices/{device}/labels");
-    QString projectPathParam("{");
-    projectPathParam.append("project").append("}");
-    fullPath.replace(projectPathParam, QUrl::toPercentEncoding(::OpenAPI::toStringValue(project)));
-    QString devicePathParam("{");
-    devicePathParam.append("device").append("}");
-    fullPath.replace(devicePathParam, QUrl::toPercentEncoding(::OpenAPI::toStringValue(device)));
-
-    OAIHttpRequestWorker *worker = new OAIHttpRequestWorker(this);
-    worker->setTimeOut(_timeOut);
-    worker->setWorkingDirectory(_workingDirectory);
-    OAIHttpRequestInput input(fullPath, "POST");
-
-    QString output = unknown_base_type.asJson();
-    input.request_body.append(output);
-
-    foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
-
-    connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIDevicesApi::projectsProjectDevicesDeviceLabelsPostCallback);
-    connect(this, &OAIDevicesApi::abortRequestsSignal, worker, &QObject::deleteLater); 
-    worker->execute(&input);
 }
 
 void OAIDevicesApi::projectsProjectDevicesDeviceLabelsPostCallback(OAIHttpRequestWorker *worker) {
@@ -433,7 +372,7 @@ void OAIDevicesApi::projectsProjectDevicesGet(const QString &project, const QStr
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIDevicesApi::projectsProjectDevicesGetCallback);
-    connect(this, &OAIDevicesApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIDevicesApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -482,7 +421,7 @@ void OAIDevicesApi::projectsProjectDevicesbatchUpdatePost(const QString &project
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIDevicesApi::projectsProjectDevicesbatchUpdatePostCallback);
-    connect(this, &OAIDevicesApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIDevicesApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 
@@ -531,7 +470,7 @@ void OAIDevicesApi::projectsProjectDevicestransferPost(const QString &project, c
     foreach (QString key, this->defaultHeaders.keys()) { input.headers.insert(key, this->defaultHeaders.value(key)); }
 
     connect(worker, &OAIHttpRequestWorker::on_execution_finished, this, &OAIDevicesApi::projectsProjectDevicestransferPostCallback);
-    connect(this, &OAIDevicesApi::abortRequestsSignal, worker, &QObject::deleteLater); 
+    connect(this, &OAIDevicesApi::abortRequestsSignal, worker, &QObject::deleteLater);
     worker->execute(&input);
 }
 

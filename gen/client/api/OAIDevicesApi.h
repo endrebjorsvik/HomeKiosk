@@ -1,6 +1,6 @@
 /**
  * API, Disruptive Technologies
- * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions. 
+ * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions.
  *
  * The version of the OpenAPI document: v2
  *
@@ -22,9 +22,8 @@
 #include "models/OAIInline_response_200_1.h"
 #include "models/OAIInline_response_200_3.h"
 #include "models/OAILabel.h"
-#include "models/OAIObject.h"
+#include "OAIObject.h"
 #include <QString>
-#include "models/UNKNOWN_BASE_TYPE.h"
 
 #include <QObject>
 
@@ -50,8 +49,6 @@ public:
 
     void projectsProjectDevicesDeviceGet(const QString &project, const QString &device);
     void projectsProjectDevicesDeviceLabelsLabelDelete(const QString &project, const QString &device, const QString &label);
-    void projectsProjectDevicesDeviceLabelsLabelPatch(const QString &project, const QString &device, const QString &label, const UNKNOWN_BASE_TYPE &unknown_base_type);
-    void projectsProjectDevicesDeviceLabelsPost(const QString &project, const QString &device, const UNKNOWN_BASE_TYPE &unknown_base_type);
     void projectsProjectDevicesGet(const QString &project, const QString &query, const QList<QString> &device_ids, const QList<QString> &device_types, const QList<QString> &label_filters, const QString &order_by, const QString &page_size, const QString &page_token);
     void projectsProjectDevicesbatchUpdatePost(const QString &project, const OAIInline_object &oai_inline_object);
     void projectsProjectDevicestransferPost(const QString &project, const OAIInline_object_1 &oai_inline_object_1);
@@ -108,7 +105,7 @@ signals:
     void projectsProjectDevicesbatchUpdatePostSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
     void projectsProjectDevicestransferPostSignalEFull(OAIHttpRequestWorker *worker, QNetworkReply::NetworkError error_type, QString error_str);
 
-    void abortRequestsSignal(); 
+    void abortRequestsSignal();
 };
 
 } // namespace OpenAPI

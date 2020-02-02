@@ -1,6 +1,6 @@
 /**
  * API, Disruptive Technologies
- * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions. 
+ * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions.
  *
  * The version of the OpenAPI document: v2
  *
@@ -86,7 +86,7 @@ QJsonObject OAIProximitySensor::asJsonObject() const {
     if (labels.size() > 0) {
         obj.insert(QString("labels"), ::OpenAPI::toJsonValue(labels));
     }
-    if (reported.isSet()) {
+    if (!reported.isEmpty()) {
         obj.insert(QString("reported"), ::OpenAPI::toJsonValue(reported));
     }
     return obj;
@@ -116,14 +116,6 @@ void OAIProximitySensor::setLabels(const QMap<QString, QString> &labels) {
     this->m_labels_isSet = true;
 }
 
-OAIAnyOfNetworkStatusEventBatteryStatusEventObjectPresentEventTouchEvent OAIProximitySensor::getReported() const {
-    return reported;
-}
-void OAIProximitySensor::setReported(const OAIAnyOfNetworkStatusEventBatteryStatusEventObjectPresentEventTouchEvent &reported) {
-    this->reported = reported;
-    this->m_reported_isSet = true;
-}
-
 bool OAIProximitySensor::isSet() const {
     bool isObjectUpdated = false;
     do {
@@ -142,7 +134,7 @@ bool OAIProximitySensor::isSet() const {
             break;
         }
 
-        if (reported.isSet()) {
+        if (!reported.isEmpty()) {
             isObjectUpdated = true;
             break;
         }

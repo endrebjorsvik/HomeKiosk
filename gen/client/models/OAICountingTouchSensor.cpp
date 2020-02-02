@@ -1,6 +1,6 @@
 /**
  * API, Disruptive Technologies
- * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions. 
+ * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions.
  *
  * The version of the OpenAPI document: v2
  *
@@ -86,7 +86,7 @@ QJsonObject OAICountingTouchSensor::asJsonObject() const {
     if (labels.size() > 0) {
         obj.insert(QString("labels"), ::OpenAPI::toJsonValue(labels));
     }
-    if (reported.isSet()) {
+    if (!reported.isEmpty()) {
         obj.insert(QString("reported"), ::OpenAPI::toJsonValue(reported));
     }
     return obj;
@@ -116,14 +116,6 @@ void OAICountingTouchSensor::setLabels(const QMap<QString, QString> &labels) {
     this->m_labels_isSet = true;
 }
 
-OAIAnyOfNetworkStatusEventBatteryStatusEventTouchCountEventTouchEvent OAICountingTouchSensor::getReported() const {
-    return reported;
-}
-void OAICountingTouchSensor::setReported(const OAIAnyOfNetworkStatusEventBatteryStatusEventTouchCountEventTouchEvent &reported) {
-    this->reported = reported;
-    this->m_reported_isSet = true;
-}
-
 bool OAICountingTouchSensor::isSet() const {
     bool isObjectUpdated = false;
     do {
@@ -142,7 +134,7 @@ bool OAICountingTouchSensor::isSet() const {
             break;
         }
 
-        if (reported.isSet()) {
+        if (!reported.isEmpty()) {
             isObjectUpdated = true;
             break;
         }

@@ -1,6 +1,6 @@
 /**
  * API, Disruptive Technologies
- * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions. 
+ * This api provides access to management, configuration and access to streams of data from Disruptive Technologies sensor solutions.
  *
  * The version of the OpenAPI document: v2
  *
@@ -12,7 +12,7 @@
 /*
  * OAICloudConnector.h
  *
- * A cloud connector device. 
+ * A cloud connector device.
  */
 
 #ifndef OAICloudConnector_H
@@ -20,7 +20,6 @@
 
 #include <QJsonObject>
 
-#include "models/OAIAnyOfConnectionStatusEventEthernetStatusEventCellularStatusEventConnectionLatencyEventTouchEvent.h"
 #include <QDateTime>
 #include <QList>
 #include <QMap>
@@ -54,9 +53,6 @@ public:
     QDateTime getUpdateTime() const;
     void setUpdateTime(const QDateTime &update_time);
 
-    OAIAnyOfConnectionStatusEventEthernetStatusEventCellularStatusEventConnectionLatencyEventTouchEvent getReported() const;
-    void setReported(const OAIAnyOfConnectionStatusEventEthernetStatusEventCellularStatusEventConnectionLatencyEventTouchEvent &reported);
-
     virtual bool isSet() const override;
     virtual bool isValid() const override;
 
@@ -79,7 +75,7 @@ private:
     bool m_update_time_isSet;
     bool m_update_time_isValid;
 
-    OAIAnyOfConnectionStatusEventEthernetStatusEventCellularStatusEventConnectionLatencyEventTouchEvent reported;
+    QString reported;
     bool m_reported_isSet;
     bool m_reported_isValid;
 };
