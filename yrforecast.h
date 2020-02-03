@@ -12,14 +12,14 @@
 class ForecastPoint : public QObject
 {
 public:
-    ForecastPoint(QDateTime from, QDateTime to, int period);
+    ForecastPoint(const QDateTime &from, const QDateTime &to, int period);
     ForecastPoint();
     void readXml(QXmlStreamReader*);
-    QString temperature() const;
-    QString precipitation() const;
-    QString time() const;
-    QUrl symbolUrl() const;
-    QString toString() const;
+    const QString temperature() const;
+    const QString precipitation() const;
+    const QString time() const;
+    const QUrl symbolUrl() const;
+    const QString toString() const;
     void print();
 
 private:
@@ -45,18 +45,18 @@ class YrForecast : public QObject
 {
     Q_OBJECT
 public:
-    explicit YrForecast(QUrl url, QNetworkAccessManager* manager, QObject *parent = nullptr);
+    explicit YrForecast(const QUrl &url, QNetworkAccessManager* manager, QObject *parent = nullptr);
     ~YrForecast();
-    bool readXmlFile(QString);
-    bool readXml(QByteArray);
-    QString toString() const;
+    bool readXmlFile(const QString &filename);
+    bool readXml(const QByteArray &xmlData);
+    const QString toString() const;
     void print();
     void startTimer();
     ForecastPoint* current();
 
 signals:
-    void forecastUpdated(QString temp, QString precip, QString time);
-    void symbolUpdated(QByteArray data);
+    void forecastUpdated(const QString &temp, const QString &precip, const QString &time);
+    void symbolUpdated(const QByteArray &data);
 
 public slots:
     void fetchForecast();
@@ -66,7 +66,7 @@ private slots:
     void symbolDownloaded(QNetworkReply* reply);
 
 private:
-    void fetchSymbol(QUrl url);
+    void fetchSymbol(const QUrl &url);
 
     QUrl xmlUrl;
     QNetworkAccessManager *networkmanager;

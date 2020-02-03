@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QTextStream>
 
-YrForecast::YrForecast(QUrl url, QNetworkAccessManager* manager, QObject *parent) : QObject(parent)
+YrForecast::YrForecast(const QUrl &url, QNetworkAccessManager* manager, QObject *parent) : QObject(parent)
 {
     // Ensure minimum one forecast in the list
     this->forecasts.append(new ForecastPoint());
@@ -56,7 +56,7 @@ void YrForecast::forecastDownloaded(QNetworkReply* reply)
     }
 }
 
-bool YrForecast::readXmlFile(QString filename)
+bool YrForecast::readXmlFile(const QString &filename)
 {
     QFile f(filename);
     if (!f.open(QFile::ReadOnly | QFile::Text)) {
@@ -66,12 +66,12 @@ bool YrForecast::readXmlFile(QString filename)
     return this->readXml(f.readAll());
 }
 
-bool YrForecast::readXml(QByteArray stream)
+bool YrForecast::readXml(const QByteArray &xmlData)
 {
     qDeleteAll(this->forecasts);
     this->forecasts.clear();
 
-    this->xml.addData(stream);
+    this->xml.addData(xmlData);
     if (this->xml.readNextStartElement()) {
         if (this->xml.name() != "weatherdata") {
             this->xml.raiseError("Unexpected file format. Expected <weatherdata> start tag");
@@ -230,7 +230,7 @@ void YrForecast::readForecastTabular()
     }
 }
 
-ForecastPoint::ForecastPoint(QDateTime from, QDateTime to, int period): from(from), to(to), period(period) {}
+ForecastPoint::ForecastPoint(const QDateTime &from, const QDateTime &to, int period): from(from), to(to), period(period) {}
 
 ForecastPoint::ForecastPoint() {}
 
@@ -277,7 +277,7 @@ void ForecastPoint::readXml(QXmlStreamReader* xml)
     }
 }
 
-QString YrForecast::toString() const
+const QString YrForecast::toString() const
 {
     QString s;
     QTextStream out(&s);
@@ -305,7 +305,7 @@ ForecastPoint* YrForecast::current()
     return forecasts.first();
 }
 
-void YrForecast::fetchSymbol(QUrl url)
+void YrForecast::fetchSymbol(const QUrl &url)
 {
     qInfo() << "Fetching symbol: " << url.toString();
     auto req = QNetworkRequest(url);
@@ -330,7 +330,7 @@ void YrForecast::symbolDownloaded(QNetworkReply* reply)
 /// ForecastPoint stuff
 /////////////////////////////////////////
 
-QString ForecastPoint::toString() const
+const QString ForecastPoint::toString() const
 {
     QString s;
     QTextStream out(&s);
@@ -347,7 +347,7 @@ void ForecastPoint::print()
 }
 
 
-QString ForecastPoint::temperature() const
+const QString ForecastPoint::temperature() const
 {
     QString unit;
     if (this->tempUnit == "celsius") {
@@ -357,12 +357,12 @@ QString ForecastPoint::temperature() const
     }
     return QString("%1%2").arg(this->temp).arg(unit);
 }
-QString ForecastPoint::precipitation() const
+const QString ForecastPoint::precipitation() const
 {
     return QString("%1 - %2 mm").arg(this->precipMin).arg(this->precipMax);
 }
 
-QString ForecastPoint::time() const
+const QString ForecastPoint::time() const
 {
     QString ret;
     QTextStream s(&ret);
@@ -371,7 +371,7 @@ QString ForecastPoint::time() const
     return ret;
 }
 
-QUrl ForecastPoint::symbolUrl() const
+const QUrl ForecastPoint::symbolUrl() const
 {
     return this->symbol;
 }

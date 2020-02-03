@@ -18,7 +18,7 @@ public:
     QString getAccessToken() const;
 
 signals:
-    void authenticated(QString accessToken);
+    void authenticated(const QString &accessToken);
 
 public slots:
 
