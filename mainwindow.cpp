@@ -1,5 +1,8 @@
+#include <QDebug>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <thread>
+#include <chrono>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,11 +20,20 @@ MainWindow::MainWindow(QWidget *parent) :
     this->forecast->startTimer();
 
     // Configure sensor API
+    QString secretsFile("/home/endre/Programmering/Qt/DTKiosk/auth.json");
+    this->dtAuth = new DTAuth(secretsFile, &this->networkmanager, this);
+
+    this->sensor = new DTSensor("bdoktet7rihjbm0413a0", "bfn87ac77eqnkh13caf0",
+                                this->dtAuth, &this->networkmanager, this);
+    connect(this->dtAuth, &DTAuth::authenticated,
+            this->sensor, &DTSensor::downloadData);
     ui->indoor->setText("24.3°C");
     ui->outdoor->setText("11.4°C");
 
     // Configure power consumption stuff
     ui->power->setText("5600 W");
+
+    this->dtAuth->authenticate();
 }
 
 MainWindow::~MainWindow()

@@ -14,16 +14,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++14
 
 SOURCES += \
+        dtauth.cpp \
+        dtsensor.cpp \
         main.cpp \
         mainwindow.cpp \
         yrforecast.cpp
 
 HEADERS += \
+        dtauth.h \
+        dtsensor.h \
         mainwindow.h \
         yrforecast.h
 
 FORMS += \
         mainwindow.ui
+
+INCLUDEPATH += $${PWD}/QJsonWebToken/src
+DEPENDPATH += $${PWD}/QJsonWebToken/src
+include(QJsonWebToken/src/qjsonwebtoken.pri))
 
 #INCLUDEPATH += $${PWD}/gen/client
 #DEPENDPATH += $${PWD}/gen/client

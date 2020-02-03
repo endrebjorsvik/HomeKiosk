@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QNetworkAccessManager>
 #include "yrforecast.h"
+#include "dtauth.h"
+#include "dtsensor.h"
 
 namespace Ui {
 class MainWindow;
@@ -27,6 +29,8 @@ protected:
 private:
     Ui::MainWindow *ui;
     YrForecast *forecast;
+    DTAuth *dtAuth;
+    DTSensor *sensor;
 };
 
 #endif // MAINWINDOW_H
