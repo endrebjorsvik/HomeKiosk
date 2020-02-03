@@ -1,0 +1,5 @@
+{
+    "email": "<<<service-account-email@something.blabla>>>",
+    "keyId": "<<<key ID>>>",
+    "keySecret": "<<<key Secret>>>"
+}
